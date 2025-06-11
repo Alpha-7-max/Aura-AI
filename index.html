@@ -1,0 +1,1233 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Aura AI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              'brand-primary': 'rgb(var(--brand-primary) / <alpha-value>)',      
+              'brand-secondary': 'rgb(var(--brand-secondary) / <alpha-value>)',  
+              'surface-main': 'rgb(var(--surface-main) / <alpha-value>)',       
+              'surface-card': 'rgb(var(--surface-card) / <alpha-value>)',      
+              'surface-input': 'rgb(var(--surface-input) / <alpha-value>)',    
+              'surface-accent': 'rgb(var(--surface-accent) / <alpha-value>)',    
+              'surface-bubble-ai': 'rgb(var(--surface-bubble-ai) / <alpha-value>)',
+              'surface-chat-area': 'rgb(var(--surface-chat-area) / <alpha-value>)', 
+              'surface-user-bubble': 'rgb(var(--surface-user-bubble) / <alpha-value>)', 
+              'border-user-bubble': 'rgb(var(--border-user-bubble) / <alpha-value>)',
+              'button-send-bg': 'rgb(var(--button-send-bg) / <alpha-value>)',
+              'button-send-hover-bg': 'rgb(var(--button-send-hover-bg) / <alpha-value>)',
+
+              'text-primary': 'rgb(var(--text-primary) / <alpha-value>)',         
+              'text-secondary': 'rgb(var(--text-secondary) / <alpha-value>)',           
+              'text-on-primary': 'rgb(var(--text-on-primary) / <alpha-value>)',
+              'text-subtle': 'rgb(var(--text-subtle) / <alpha-value>)',
+
+              'border-default': 'rgb(var(--border-default) / <alpha-value>)',
+              'border-light': 'rgb(var(--border-light) / <alpha-value>)',
+              'border-medium': 'rgb(var(--border-medium) / <alpha-value>)',
+              'interactive-hover': 'rgb(var(--interactive-hover) / <alpha-value>)',
+              'interactive-focus-ring': 'rgb(var(--interactive-focus-ring-color) / <alpha-value>)',
+              
+              'status-info': 'rgb(var(--status-info) / <alpha-value>)',
+              'status-success': 'rgb(var(--status-success) / <alpha-value>)',
+              'status-warning': 'rgb(var(--status-warning) / <alpha-value>)',
+              'status-error': 'rgb(var(--status-error) / <alpha-value>)',
+              'error-fg': 'rgb(var(--error-fg) / <alpha-value>)', 
+            },
+            fontFamily: {
+              sans: ['Inter', 'sans-serif'],
+              poppins: ['Poppins', 'sans-serif'],
+              roboto: ['Roboto', 'sans-serif'],
+            },
+            animation: {
+              'fade-in-up': 'fadeInUp 0.5s ease-out forwards',
+              'scale-in-subtle': 'scaleInSubtle 0.35s ease-out forwards',
+              'pulse-gentle': 'pulseGentle 2.8s infinite ease-in-out', 
+              'typing-indicator': 'typingIndicator 1.2s infinite ease-in-out',
+              'button-press': 'buttonPress 0.2s ease-out',
+              'rippleOut': 'rippleOut 2.5s infinite ease-out', 
+              'speak-bob': 'speakBob 0.7s ease-in-out',
+              'think-glance': 'thinkGlance 2s infinite ease-in-out',
+              'blink': 'blink 4s infinite ease-in-out',
+              'happy-bounce': 'happyBounce 0.5s ease-out',
+              'empty-state-glow': 'emptyStateGlow 3.5s infinite alternate ease-in-out',
+              'shiny-text': 'shinyText 2.5s linear infinite',
+              'dot-pulse': 'dotPulse 1.4s infinite ease-in-out',
+              'modal-fade-in': 'modal-fade-in 0.3s ease-out forwards', 
+              'modal-fade-out': 'modal-fade-out 0.3s ease-in forwards', 
+            },
+            keyframes: {
+              fadeInUp: { '0%': { opacity: '0', transform: 'translateY(10px)' }, '100%': { opacity: '1', transform: 'translateY(0)' }, },
+              scaleInSubtle: { '0%': { opacity: '0.5', transform: 'scale(0.95)' }, '100%': { opacity: '1', transform: 'scale(1)' }, },
+              pulseGentle: {  '0%, 100%': { transform: 'scale(1)', opacity: '0.8' }, '50%': { transform: 'scale(1.015)', opacity: '1' }, },
+              typingIndicator: { '0%': { transform: 'translateY(0px)', opacity: '0.5' }, '25%': { transform: 'translateY(-3px)', opacity: '1' }, '50%': { transform: 'translateY(0px)', opacity: '0.5' }, '100%': { transform: 'translateY(0px)', opacity: '0.5' }, },
+              buttonPress: { '0%': { transform: 'scale(1)' }, '50%': { transform: 'scale(0.96)'}, '100%': { transform: 'scale(1)' }, },
+              emptyStateGlow: {  '0%': { filter: 'drop-shadow(0 0 3px rgba(var(--brand-primary), 0.2)) drop-shadow(0 0 6px rgba(var(--brand-primary), 0.15))' }, '100%': { filter: 'drop-shadow(0 0 6px rgba(var(--brand-primary), 0.25)) drop-shadow(0 0 12px rgba(var(--brand-primary), 0.18))' }, },
+              rippleOut: {  '0%': { transform: 'scale(0.8)', opacity: '0.3' }, '70%': { opacity: '0.1' }, '100%': { transform: 'scale(2.0)', opacity: '0' }, },
+              speakBob: { '0%, 100%': { transform: 'translateY(0) scale(1)' }, '50%': { transform: 'translateY(-2px) scale(1.05)' }, },
+              thinkGlance: { '0%, 100%': { transform: 'translateX(0px)' }, '25%': { transform: 'translateX(-1px)' }, '75%': { transform: 'translateX(1px)' }, },
+              blink: { '0%, 90%, 100%': { transform: 'scaleY(1)' }, '95%': { transform: 'scaleY(0.1)' }, },
+              happyBounce: { '0%, 100%': { transform: 'translateY(0) rotate(0deg) scale(1)' }, '50%': { transform: 'translateY(-3px) rotate(3deg) scale(1.03)' }, },
+              shinyText: { '0%': { backgroundPosition: '-200% center' }, '100%': { backgroundPosition: '200% center' }, },
+              dotPulse: {
+                '0%, 80%, 100%': { transform: 'scale(0)', opacity: '0' },
+                '40%': { transform: 'scale(1.0)', opacity: '1' }
+              },
+              'modal-fade-in': { 
+                '0%': { opacity: '0', transform: 'scale(0.95)' },
+                '100%': { opacity: '1', transform: 'scale(1)' },
+              },
+              'modal-fade-out': { 
+                '0%': { opacity: '1', transform: 'scale(1)' },
+                '100%': { opacity: '0', transform: 'scale(0.95)' },
+              },
+            },
+            spacing: { 
+              '1.5': '0.375rem', 
+              '2.5': '0.625rem',
+            },
+            boxShadow: {
+                'interactive': '0 4px 10px 0 rgba(var(--button-send-bg), 0.15)', 
+                'card': '0 6px 20px rgba(var(--text-primary), 0.04), 0 3px 8px rgba(var(--text-primary),0.02)', 
+                'header': '0 1px 2px rgba(var(--text-primary), 0.03), 0 1px 1px rgba(var(--text-primary), 0.015)',
+                'input-focus': '0 0 0 1px rgb(var(--interactive-focus-ring-color) / 1)', 
+                'chat-window': '0 15px 50px -8px rgba(var(--text-primary), 0.08), 0 8px 25px -8px rgba(var(--text-primary),0.05)',
+            }
+          },
+        },
+      }
+    </script>
+    <style type="text/tailwindcss">
+      @layer base {
+        :root {
+          --brand-primary: 100 116 139; 
+          --brand-secondary: 71 85 105; 
+          
+          --button-send-bg: 71 85 105;       
+          --button-send-hover-bg: 100 116 139; 
+          
+          --interactive-focus-ring-color: 100 116 139; 
+          
+          --surface-main: 248 250 252; 
+          --surface-card: 255 255 255;
+          --surface-chat-area: 249 250 251; 
+          --surface-input: 255 255 255;
+          --surface-accent: 241 245 249; 
+          --surface-bubble-ai: 255 255 255;
+          
+          --surface-user-bubble: 219 234 254; 
+          --border-user-bubble: 191 219 254;  
+          
+          --text-primary: 17 24 39; 
+          --text-secondary: 55 65 81;    
+          --text-subtle: 107 114 128; 
+          --text-on-primary: 255 255 255; 
+          
+          --border-default: 229 231 235; 
+          --border-light: 243 244 246;     
+          --border-medium: 209 213 219; 
+          
+          --interactive-hover: 229 231 235; 
+          
+          --status-info: 59 130 246; 
+          --status-success: 22 163 74;    
+          --status-warning: 245 158 11; 
+          --status-error: 220 38 38;
+          --error-fg: 255 255 255; 
+        }
+        html, body, #root { @apply h-full overflow-hidden; }
+        body { @apply font-sans bg-surface-main text-text-primary m-0; }
+        ::selection { @apply bg-gray-200 text-gray-700; } 
+      }
+      @layer components {
+        .markdown-content p { @apply mb-3 last:mb-0; }
+        .markdown-content ul, .markdown-content ol { @apply list-inside mb-3 pl-4; }
+        .markdown-content ul { @apply list-disc; } .markdown-content ul ul { @apply list-[circle] ml-4;}
+        .markdown-content ol { @apply list-decimal; } .markdown-content ol ol { @apply list-[lower-alpha] ml-4;}
+        .markdown-content li { @apply mb-1.5; }
+        .markdown-content strong, .markdown-content b { @apply font-semibold text-text-primary; }
+        .markdown-content em, .markdown-content i { @apply italic text-text-secondary; }
+        .markdown-content code:not(pre code) { 
+          @apply bg-gray-200 text-gray-700 text-xs px-1.5 py-0.5 rounded-md font-mono shadow-sm border border-gray-300; 
+        } 
+        
+        .markdown-content pre { 
+          @apply bg-gray-50 text-gray-800 text-base rounded-lg overflow-x-auto my-4 font-mono relative border border-gray-300; 
+        } 
+        .markdown-content pre code { 
+          @apply block bg-transparent text-inherit text-sm p-0 shadow-none border-none px-4 pb-4 pt-8 !whitespace-pre; 
+        }
+        
+        .markdown-content pre::-webkit-scrollbar { @apply h-px; } 
+        .markdown-content pre::-webkit-scrollbar-track { @apply bg-transparent; } 
+        .markdown-content pre::-webkit-scrollbar-thumb { @apply bg-gray-200 rounded-full hover:bg-gray-300 transition-colors; } 
+        .markdown-content pre { scrollbar-width: thin; scrollbar-color: theme('colors.gray.200') transparent; }
+
+        .markdown-content a { @apply text-brand-primary hover:text-brand-secondary underline decoration-brand-primary/50 hover:decoration-brand-secondary/50 transition-colors; } 
+        .markdown-content blockquote { @apply border-l-4 border-brand-primary/60 bg-brand-primary/10 pl-4 py-2 my-4 text-text-secondary italic; }
+        .markdown-content h1, .markdown-content h2, .markdown-content h3,
+        .markdown-content h4, .markdown-content h5, .markdown-content h6 { @apply font-poppins font-semibold my-4 text-text-primary; }
+        .markdown-content h1 { @apply text-xl leading-tight; } .markdown-content h2 { @apply text-lg leading-tight; } .markdown-content h3 { @apply text-base leading-tight; }
+        .markdown-content hr { @apply my-6 border-border-default; }
+        
+        .markdown-content table { 
+          @apply block max-w-full my-4 border-collapse text-sm shadow-sm rounded-lg overflow-x-auto;
+          scrollbar-width: thin; 
+          scrollbar-color: theme('colors.gray.300') theme('colors.gray.100');
+        }
+        .markdown-content table::-webkit-scrollbar { @apply h-1; } 
+        .markdown-content table::-webkit-scrollbar-track { @apply bg-gray-100 rounded-full; } 
+        .markdown-content table::-webkit-scrollbar-thumb { @apply bg-gray-300 rounded-full hover:bg-gray-400 transition-colors; }
+        .markdown-content th, .markdown-content td { @apply border border-border-default p-2.5 text-left; }
+        .markdown-content th { @apply bg-surface-accent font-semibold text-text-primary; }
+        .markdown-content td { @apply text-text-secondary; }
+        .markdown-content tbody tr:nth-child(even) { @apply bg-gray-50/50; }
+
+        .chat-messages-container::-webkit-scrollbar { @apply w-1.5; } 
+        .chat-messages-container::-webkit-scrollbar-track { @apply bg-transparent rounded-full; } 
+        .chat-messages-container::-webkit-scrollbar-thumb { @apply bg-gray-200 rounded-full hover:bg-gray-300 transition-colors; } 
+        .chat-messages-container { scrollbar-width: thin; scrollbar-color: theme('colors.gray.200') transparent; } 
+        
+        textarea.auto-resize { min-height: 52px; max-height: 180px; }
+        textarea.auto-resize::-webkit-scrollbar { width: 5px; }
+        textarea.auto-resize::-webkit-scrollbar-track { background: transparent; margin-block: 2px; }
+        textarea.auto-resize::-webkit-scrollbar-thumb { background-color: rgba(var(--text-subtle), 0.25); border-radius: 10px; }
+        textarea.auto-resize::-webkit-scrollbar-thumb:hover { background-color: rgba(var(--text-subtle), 0.4); }
+        textarea.auto-resize { scrollbar-width: thin; scrollbar-color: rgba(var(--text-subtle), 0.25) transparent; }
+
+        .text-gradient-brand {
+          background-image: linear-gradient(to right, #7f7fd5, #86a8e7, #91eae4);
+          -webkit-background-clip: text; 
+          background-clip: text; 
+          color: transparent;
+        }
+        .text-gradient-brand-subtle {
+          background-image: linear-gradient(to right, #a4a4f0, #b3f1ec); 
+          -webkit-background-clip: text; 
+          background-clip: text; 
+          color: transparent;
+        }
+
+        .animated-shiny-text { @apply bg-clip-text text-transparent bg-gradient-to-r from-brand-primary via-sky-300 to-pink-400; background-size: 200% auto; animation: shinyText 2.5s linear infinite; }
+        
+        .animated-shiny-text-gray {
+          @apply bg-clip-text text-transparent bg-gradient-to-r from-slate-600 via-slate-400 to-slate-600;
+          background-size: 200% auto;
+          animation: shinyText 2.5s linear infinite;
+        }
+
+        .hljs { 
+            @apply !bg-transparent !text-inherit; 
+        }
+      }
+    </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com"> <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin> 
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700;800&family=Roboto:wght@400;500;700;900&family=Outfit:wght@400;700&display=swap" rel="stylesheet"> 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-light.min.css">
+
+    <script type="importmap">
+      {
+        "imports": {
+          "@google/genai": "https://esm.sh/@google/generative-ai@^0.11.3",
+          "react": "https://esm.sh/react@^18.2.0",
+          "react/": "https://esm.sh/react@^18.2.0/",
+          "react-dom/client": "https://esm.sh/react-dom@^18.2.0/client",
+          "marked": "https://esm.sh/marked@^12.0.2",
+          "highlight.js": "https://esm.sh/highlight.js@^11.9.0"
+        }
+      }
+    </script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  </head>
+  <body> <div id="root"></div>
+    <script type="text/babel" data-type="module">
+      import React, { useState, useCallback, useEffect, useRef } from 'react';
+      import ReactDOM from 'react-dom/client';
+      import { GoogleGenerativeAI } from '@google/genai';
+      import { marked } from 'marked';
+      import hljs from 'highlight.js';
+
+      marked.setOptions({ gfm: true, breaks: true, smartypants: true });
+
+      const GEMINI_MODEL_NAME = 'gemini-2.5-flash-preview-04-17'; 
+      const SEARCH_DECIDER_MODEL_NAME = 'gemini-2.5-flash-preview-04-17';
+      const API_KEY = "AIzaSyDSF270Y1VJf1fe4G8ZAuw7bOITbAlal74"; 
+      
+      const MAX_FILE_SIZE_MB = 5; const MAX_TOTAL_FILES_SIZE_MB = 20;
+
+      if (!API_KEY || API_KEY === "YOUR_GEMINI_API_KEY") console.error(" ERROR: Gemini API Key is not set.");
+      const genAI = new GoogleGenerativeAI(API_KEY);
+
+      const SYSTEM_INSTRUCTION_SEARCH_DECIDER = `You are an AI assistant that determines if a user's query requires a web search to answer accurately. Consider the following: - Does the query ask for real-time information (e.g., news, weather, stock prices)? - Does the query ask for specific facts that might change or require verification (e.g., statistics, specific dates, current events)? - Does the query ask for diverse perspectives or opinions on a topic that would benefit from multiple web sources? - Is the query purely conversational (e.g., "hello", "how are you", "tell me a joke")? - Is the query asking for creative content generation (e.g., "write a poem", "tell me a story") that doesn't rely on specific external facts? If in doubt, assume a search is needed. Respond ONLY with a JSON object with a single key "search_needed" (boolean value). Example: {"search_needed": true} Do NOT include any other text or markdown formatting like \`\`\`json. Just the raw JSON object.`;
+
+      async function determineSearchNeed_service(aiInstance, query) {
+        if (!aiInstance) return true; 
+        const prompt = `${SYSTEM_INSTRUCTION_SEARCH_DECIDER}\nUser Query: "${query}"`;
+        try {
+            const model = aiInstance.getGenerativeModel({ model: SEARCH_DECIDER_MODEL_NAME });
+            const result = await model.generateContent({
+                contents: [{ role: "user", parts: [{text: prompt}] }],
+                generationConfig: { responseMimeType: "application/json", temperature: 0.1 }
+            });
+            const response = result.response;
+            let jsonStr = response.text().trim();
+
+            const fenceRegex = /^```(\w*)?\s*\n?(.*?)\n?\s*```$/s;
+            const match = jsonStr.match(fenceRegex);
+            if (match && match[2]) jsonStr = match[2].trim();
+            
+            const searchDecision = JSON.parse(jsonStr);
+            return searchDecision.search_needed === true;
+        } catch (error) { 
+            console.error("Error determining search need:", error); 
+            return true; // Default to needing search on error
+        }
+      }
+
+      function createSourceLinksElement(sources) { 
+        if (!sources || sources.length === 0) return null; 
+        const containerDiv = document.createElement('div'); 
+        containerDiv.className = "mt-3 pt-3 border-t border-[#E5E8EB]/70"; 
+        const heading = document.createElement('h4');
+        heading.className = "text-xs font-semibold text-text-subtle mb-1.5 flex items-center"; 
+        heading.innerHTML = `<i class="fas fa-link text-xs mr-1.5 opacity-70 text-text-primary"></i>Sources:`;
+        containerDiv.appendChild(heading);
+        const pillsContainer = document.createElement('div');
+        pillsContainer.className = "flex flex-wrap gap-2"; 
+        sources.forEach((source, index) => { 
+            const pillLink = document.createElement('a'); 
+            pillLink.href = source.uri; pillLink.target = "_blank"; pillLink.rel = "noopener noreferrer";
+            pillLink.className = "text-xs bg-slate-100 text-slate-700 hover:bg-slate-200 px-2.5 py-1 rounded-full transition-colors duration-150 truncate max-w-[200px] sm:max-w-[250px] inline-block"; 
+            
+            const displayTitle = source.title || (source.uri && source.uri.length > 60 ? source.uri.substring(0, 60) + "..." : source.uri) || 'Source';
+            pillLink.textContent = `${index + 1}. ${displayTitle}`; 
+            pillLink.title = source.title || source.uri;
+            pillsContainer.appendChild(pillLink); 
+        }); 
+        containerDiv.appendChild(pillsContainer);
+        return containerDiv;
+      }
+
+
+      function getSystemInstruction() {
+        return `You are Aura AI, a highly advanced, friendly, and culturally aware assistant.
+
+PRIMARY LANGUAGE: Your primary language of response is Roman Urdu (Urdu written using the English alphabet). Strive to use it for all general conversation and answers.
+
+LANGUAGE FLEXIBILITY:
+-   If the user EXPLICITLY asks you to respond in a different language (e.g., "respond in English", "can you say that in French?", "اس کا جواب انگریزی میں دو"), you MUST use the requested language for that response.
+-   After fulfilling a request in another language, if the user continues in that language or the context clearly indicates they wish to continue in that language for the current topic, you may continue in that language for a few turns.
+-   However, your DEFAULT behavior is to revert to Roman Urdu for new, unrelated queries or if the user switches back to Roman Urdu.
+-   NEVER refuse a direct and clear request to use a specific language.
+-   When using a language other than Roman Urdu, ensure your response in that language is natural and accurate.
+
+CRITICAL INSTRUCTION (Roman Urdu): When responding in Roman Urdu, it MUST be Urdu written in the English alphabet. NO Devanagari or any other script for Urdu words.
+
+VERY CRITICAL - RESPONSE CONTENT (All Languages):
+Your final response to the user MUST be ONLY in the determined language for that turn (Roman Urdu by default, or as per user's explicit request).
+NEVER, under any circumstances, include any of your internal thought processes, logs, tool code (e.g., \`tool_code print(google_search.search(...))\`), Python print outputs, JSON objects representing your internal state, or any other meta-commentary about your operations in the response visible to the user.
+Stick strictly to providing the answer or engaging in conversation in the appropriate language as a helpful assistant. If you use a tool, integrate its findings naturally into your response without mentioning the tool's execution details.
+
+CORE OPERATING PRINCIPLE & SEARCH POLICY:
+1.  **Prioritize Accuracy & Recency Above All:** Your primary function is to deliver information that is current, factual, and directly relevant to the user's query.
+2.  **Proactive Search Mindset (Like Perplexity AI):**
+    *   The system will automatically determine if a search is needed.
+    *   **Heavily Favor Search Over Training Data:** For any query that isn't purely conversational (e.g., greetings, general chat) or a simple, timeless factual recall (e.g., "what is 2+2?"), your default approach should be to verify or retrieve information via search IF THE SEARCH TOOL IS ACTIVE.
+    *   **Especially for Specifics:** If the query involves names of people, places, organizations, products, creative works (songs, movies, books), dates, statistics, current events, or any specific detail that could have changed or have multiple facets, consider search indispensable IF THE SEARCH TOOL IS ACTIVE.
+    *   If your internal knowledge feels even slightly outdated, incomplete, or potentially ambiguous for the specific query, you MUST rely on the search tool if it's active.
+3.  **User-Initiated Search is a MANDATORY Command:**
+    *   If the user explicitly asks you to search using phrases such as "search krke," "search krlo," "search kro," "internet pe dekho," "look it up," "find out," or any similar direct commands for external information retrieval:
+        *   You MUST use the search tool to formulate your answer IF IT IS ACTIVE for this turn. Do not answer from memory or provide a hypothetical search.
+        *   If the search tool is not active (because the system determined it wasn't needed based on the query), and the user explicitly asks for a search, then acknowledge their request and try to answer from your knowledge, perhaps suggesting they rephrase if they still need fresh info. Example: "Main abhi search nahi kar sakta, lekin is barey mein meri maloomat yeh hai..."
+
+WHEN SEARCH TOOL IS AVAILABLE (SYSTEM-PROVIDED):
+-   This occurs if the system determined a search was necessary based on the user's query.
+-   You MUST utilize the search tool.
+-   Formulate your answer based *primarily* on the information retrieved from the search.
+-   The UI will display a "Searching..." indicator and then sources.
+
+SEARCH FAILURE FALLBACK POLICY (When Search Tool was Active but Failed/Yielded Poor Results):
+*   This policy applies if you have attempted a search (because the system enabled the tool) AND:
+    a) The search tool itself encounters an internal error during its operation.
+    OR
+    b) The search tool returns no relevant information, or results that you deem unhelpful or insufficient to answer the query.
+*   **Procedure:**
+    1.  **Assess Query Type:** First, determine if the original user query was for highly specific, time-sensitive, or volatile information that *absolutely* requires fresh search data.
+    2.  **Attempt Answer from General Knowledge:** If you assess that the query *might* be answerable from your general training knowledge (i.e., it's a more common or general topic, not strictly needing hyper-recent data):
+        *   You SHOULD attempt to answer the query directly using your existing knowledge, without explicitly mentioning the search difficulty unless necessary for context.
+        *   If you can provide a satisfactory answer this way, do so (in your determined response language).
+    3.  **Polite Fallback Message (If Necessary):** If:
+        *   The query genuinely required up-to-the-minute information that only a successful search could provide.
+        *   OR, you attempted to answer from your general knowledge (as per step 2) but still cannot provide a good or complete response.
+        *   THEN, you should respond with a polite and helpful message in your determined response language. For example (Roman Urdu): "Mujhe abhi search karne mein thori dushwari pesh aa rahi hai, ya shayad is mauzu par wazeh maloomat  nahi mil pa rahi. Aap message dobara regenerate karne ki koshish kar sakte hain, ya apna sawal thora badal kar ya wazeh kar ke poochein. Shukriya!"
+        *   Provide the user-facing polite message.
+
+WHEN NO SEARCH IS NEEDED (Standard Operation):
+-   For purely conversational interactions or queries where external data are clearly unnecessary (as determined by the system), respond directly in your determined response language (default Roman Urdu).
+
+Initial Greeting:
+- AVOID mentioning your creator (Azeem) in your initial, unsolicited greetings.
+ General Greeting Behavior:
+- Greet ONLY when starting a new session or when it naturally fits the context (e.g., when the user returns after a long pause).
+DO NOT repeat the greeting unnecessarily (e.g., on follow-up queries).
+- Only respond with greeting when it’s the start of a session.
+- Only provide time, weather, or city-specific data when the user clearly asks for it.
+- Do not inject identity statements unless the user inquires.
+
+Responding to Identity Questions:
+- If asked "Who are you?" or "What is your name?" (or similar queries about your identity): Respond with something like "Main Aura AI hoon, ek advanced digital assistant. 😊" (in Roman Urdu, or the equivalent in the requested language if applicable).
+- If asked about your creator (e.g., "Who made you?", "Kis ne banaya hai?"): Then you should say: "Mujhe **Azeem** ne banaya hai, jo ek talented developer hain 🌟" (in Roman Urdu, or the equivalent in the requested language if applicable).
+- If asked for more details about Azeem: "Unke baare mein zyada details mere paas nahi hain, lekin woh mere creator aur developer hain 💻" (in Roman Urdu, or the equivalent in the requested language if applicable).
+- It's not necessary to give a fixed response as you've been instructed. You can also express it in your own style, as you feel comfortable, or depending on the user's mood.
+
+Core Language Rules (for Roman Urdu):
+- Write everything in Roman Urdu except for:
+  • Technical terms that don't have common Roman Urdu equivalents (e.g., API, database, JavaScript)
+  • Proper nouns (names of people, places, companies)
+  • Code snippets and technical commands
+- Your entire Roman Urdu response, including all Urdu words, MUST be written using the English alphabet. No other scripts (like Devanagari, Nastaliq, etc.) are allowed for Urdu words.
+- Use natural Roman Urdu that people actually speak, not overly formal or literary
+- Mix in commonly used English words that are part of everyday Roman Urdu conversation.
+- CRITICAL LANGUAGE NOTE (Roman Urdu): Absolutely NO Hindi words. Your vocabulary must be pure Roman Urdu as commonly spoken in Pakistan. Hindi words are not understood and will be perceived negatively. Strive for vocabulary that is natural in everyday Pakistani Roman Urdu conversation, avoiding uncommon or purely Hindi words.
+
+
+Formatting Guidelines:
+- Use Markdown extensively for better readability
+- Create tables for comparisons and structured data
+- Use bullet points and numbered lists where appropriate
+- Format code blocks properly.
+- Use **bold** for emphasis and *italic* for subtle highlights.
+- Add horizontal rules (---) to separate major sections
+
+Personality & Communication Style:
+- Be warm, friendly, and conversational like talking to a close friend
+- Show genuine interest in helping users
+- Use appropriate humor when the situation allows
+- Be encouraging and supportive, especially when users are struggling
+- Acknowledge user's emotions and respond with empathy
+
+Enhanced Emoji Usage:
+📌 Core Emoji Principles:
+- Use emojis naturally to enhance communication, not force them
+- Match emoji intensity to the conversation tone
+- Use 1-3 relevant emojis per message typically
+- Place emojis at natural pause points or sentence ends
+
+🎯 Contextual Emoji Guidelines:
+
+When User is Learning/Curious 📚:
+- Use: 💡 🤔 📝 🎯 🔍 ✨ 🧠 📊
+- Example (Roman Urdu): "Chalo isko detail mein samjhte hain 📝"
+
+Technical Discussions 💻:
+- Use: 💻 🔧 ⚙️ 🛠️ 📱 🌐 🔐 📡 🎮
+- Example (Roman Urdu): "Yeh code ka structure kuch is tarah hai 💻"
+
+Encouragement & Support 💪:
+- Use: 💪 🌟 🎉 👏 🙌 ✨ 🚀 🏆 💯
+- Example (Roman Urdu): "Bohot zabardast! Aap ne seekh liya 🎉"
+
+Problem Solving 🔧:
+- Use: 🤔 💭 🔍 ⚡ 🎯 ✅ ❌ 🔄
+- Example (Roman Urdu): "Is problem ka solution yeh ho sakta hai ⚡"
+
+Emotional Support 🤗:
+- Use: 🤗 💖 😊 🌈 🫂 💝 🌸 ☀️
+- Example (Roman Urdu): "Tension na lein, sab theek ho jayega 🤗"
+
+Warnings & Cautions ⚠️:
+- Use: ⚠️ 🚨 ⛔ 📍 ❗ 🔴 🛑
+- Example (Roman Urdu): "Yeh step thoda risky hai, dhyan se karein ⚠️"
+
+Success & Achievement 🏆:
+- Use: 🎊 🥳 🌟 🏅 🎯 ✨ 🎉 👑
+- Example (Roman Urdu): "Mubarak ho! Aap kamyab ho gaye 🏆"
+
+Fun & Casual 😄:
+- Use: 😄 😂 🤪 😎 🎈 🍕 ☕ 🎵
+- Example (Roman Urdu): "Haha, bilkul sahi kaha aap ne 😄"
+
+
+Internet Search Capability:
+- The system will automatically provide you with a search tool based on user input.
+- When using information from a search:
+    - Integrate it naturally into your response (in the determined language).
+    - You can say phrases like (Roman Urdu): "Maine search karke yeh maloomat hasil ki hai" or "Internet search ke mutabiq..."
+    - The UI will handle displaying any provided source URLs.
+
+Search Prioritization:
+- When a user's query is general (not specifying a particular location or context) AND search is active:
+    - Your primary search context should be **Pakistan**.
+    - Within Pakistan, pay special attention to topics relevant to **Punjab** and **Lahore**.
+    - Frame your answers and examples with this regional context in mind, if appropriate (when responding in Roman Urdu or a contextually relevant language).
+- If the user explicitly asks about a different location, person, or topic, prioritize their specific request.
+- This regional prioritization is a general guideline for ambiguous queries. Always use your best judgment.
+
+Response Structure:
+1. Acknowledge the user's query with understanding
+2. Provide clear, structured information
+3. Use examples and analogies from daily life (relevant to the language and context)
+4. Summarize key points if the response is long
+5. End with encouragement or next steps
+
+File Handling:
+- When users share images, describe them in detail in your determined response language (default Roman Urdu).
+- For text files, acknowledge the content and provide relevant assistance.
+- Suggest ways to better utilize shared files if applicable.
+
+Cultural Sensitivity:
+- Be aware of South Asian cultural contexts, especially when using Roman Urdu.
+- Use respectful language (e.g., "aap" in Roman Urdu, not "tum") unless the user indicates otherwise.
+- Reference local examples and contexts when explaining concepts, where appropriate.
+- Be mindful of religious and cultural sensitivities.
+
+Appropriate Discussion Areas:
+- Sexual health and wellness
+- Physical intimacy and pleasure
+- Relationship dynamics and communication
+- Dating and romance
+- Common sexual concerns
+- Safe sex practices
+- Body image and confidence
+- Emotional intimacy
+- Sexual compatibility
+- Relationship boundaries
+- Personal desires and needs
+- Common fantasies
+- Consent and boundaries
+- Sexual wellness products
+- Dating apps and online dating
+
+Language Style (for sensitive topics, adapt to determined language):
+- Use appropriate terms for intimate topics.
+- Employ medical/clinical terms when needed.
+- Use culturally understood euphemisms where appropriate.
+- Match user's comfort level with terminology.
+- Be direct but tasteful.
+- Avoid crude or explicit language.
+- Use mature, adult-appropriate phrasing.
+
+Quality Standards:
+- Ensure responses are comprehensive yet concise.
+- Double-check spelling and grammar for the language used.
+- Provide actionable advice whenever possible.
+- Follow up complex explanations with "Umeed he apko samjh agyi hogi?" (Roman Urdu) or similar in the response language.
+- Encourage questions with "Agar koi sawal ho to zaror poochiye 😊" (Roman Urdu) or similar in the response language.
+
+Remember: You're not just an AI assistant, you're a helpful friend who happens to be very knowledgeable. Make every interaction meaningful and helpful!
+`;
+      }
+      
+      const COPY_ICON_SVG = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4"><path d="M20 2H10c-1.103 0-2 .897-2 2v4H4c-1.103 0-2 .897-2 2v10c0 1.103.897 2 2 2h10c1.103 0 2-.897 2-2v-4h4c1.103 0 2-.897 2-2V4c0-1.103-.897-2-2-2zM4 20V10h10l.002 10H4zm16-6h-4v-4c0-1.103-.897-2-2-2h-4V4h10v10z"></path></svg>`;
+      const COPIED_ICON_SVG = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4"><path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"></path></svg>`;
+      const FileTextIcon = (props) => (<i className={`fa-solid fa-file-lines ${props.className || ''}`}></i>);
+      const FileImageIcon = (props) => (<i className={`fa-solid fa-file-image ${props.className || ''}`}></i>);
+
+      const ChatMessageItem = ({ message }) => { 
+        const isUser = message.role === 'user'; 
+        const isError = message.isError === true; 
+        const isModelLoading = message.role === 'model' && message.isLoading && !isError;
+        
+        const contentRef = useRef(null); 
+        
+        const isModelLoadingWithSearch = isModelLoading && message.searchUsed && message.loadingText === "Searching...";
+        const isModelLoadingThinking = isModelLoading && (!message.searchUsed || message.loadingText === "Thinking...");
+        
+        useEffect(() => {
+          if (message.role === 'model' && !isError && !message.isLoading && contentRef.current) {
+            const preElements = contentRef.current.querySelectorAll('pre');
+            preElements.forEach(preEl => {
+              if (preEl.parentNode && preEl.parentNode.classList.contains('code-block-wrapper')) {
+                const existingCodeElement = preEl.querySelector('code');
+                if (existingCodeElement && !existingCodeElement.dataset.highlighted) {
+                    hljs.highlightElement(existingCodeElement);
+                    existingCodeElement.dataset.highlighted = 'true';
+                }
+                return;
+              }
+
+              const codeElement = preEl.querySelector('code');
+              if (!codeElement) return;
+
+              const wrapper = document.createElement('div');
+              wrapper.classList.add('code-block-wrapper');
+              wrapper.style.position = 'relative';
+
+              const button = document.createElement('button');
+              button.innerHTML = COPY_ICON_SVG;
+              button.classList.add(
+                'code-copy-button', 'absolute', 'p-1.5',
+                'bg-gray-100', 'hover:bg-gray-200',
+                'text-gray-600', 'hover:text-gray-800',
+                'border', 'border-gray-300', 'rounded-md',
+                'transition-colors', 'duration-150',
+                'opacity-80', 'hover:opacity-100'
+              );
+              button.style.top = '0.35rem';
+              button.style.right = '0.35rem';
+              button.style.zIndex = '10';
+              button.setAttribute('aria-label', 'Copy code');
+
+              button.onclick = () => {
+                if (codeElement) {
+                  navigator.clipboard.writeText(codeElement.textContent || '').then(() => {
+                    button.innerHTML = COPIED_ICON_SVG;
+                    button.classList.add('text-green-500');
+                    button.classList.remove('text-gray-600', 'hover:text-gray-800');
+                    setTimeout(() => {
+                      button.innerHTML = COPY_ICON_SVG;
+                      button.classList.remove('text-green-500');
+                      button.classList.add('text-gray-600', 'hover:text-gray-800');
+                    }, 2000);
+                  }).catch(err => console.error('Failed to copy: ', err));
+                }
+              };
+
+              if (preEl.parentNode) {
+                preEl.parentNode.insertBefore(wrapper, preEl);
+                wrapper.appendChild(preEl); 
+                wrapper.appendChild(button); 
+              }
+              
+              if (!codeElement.dataset.highlighted) {
+                hljs.highlightElement(codeElement);
+                codeElement.dataset.highlighted = 'true';
+              }
+            });
+
+            // Handle sources rendering
+            const sourcesContainer = contentRef.current.querySelector('.sources-placeholder');
+            if (sourcesContainer && message.sources && message.sources.length > 0) {
+                 const sourcesElement = createSourceLinksElement(message.sources);
+                 if (sourcesElement) {
+                    sourcesContainer.appendChild(sourcesElement);
+                 }
+            }
+
+          }
+        }, [message.text, message.role, message.isLoading, isError, message.sources]);
+
+        if (message.role === 'system') { const systemMessageStyle = isError ? "px-4 py-2 text-xs text-red-700 bg-red-100 border border-red-300 rounded-full shadow-sm italic" : "px-4 py-2 text-xs text-text-subtle bg-surface-accent border border-border-light rounded-full shadow-sm italic"; return (<div className="flex justify-center my-4 animate-fade-in-up opacity-0" style={{animationFillMode: 'forwards'}}><div className={systemMessageStyle}>{isError ? <><i className="fas fa-exclamation-triangle mr-1.5"></i> {message.text}</> : message.text }</div></div>);}
+        
+        let bubbleBaseClasses = 'px-4 py-3 md:px-4 md:py-3 shadow-card animate-fade-in-up opacity-0'; 
+        let bubbleRoleClasses = ''; 
+        let bubbleWidthClasses = ''; 
+        let contentToShow = null;
+        
+        if (isUser) { 
+          bubbleRoleClasses = 'bg-surface-accent text-text-primary rounded-2xl rounded-br-md'; 
+          bubbleWidthClasses = 'max-w-[80%] sm:max-w-[75%]'; 
+          contentToShow = <p className="text-base whitespace-pre-wrap break-words">{message.text}</p>; 
+        } else if (message.role === 'model') { 
+            bubbleRoleClasses = 'bg-white text-text-primary rounded-2xl border border-[#E5E8EB]'; 
+            bubbleWidthClasses = 'max-w-full w-full'; 
+            
+            if(isError) { 
+                bubbleRoleClasses = 'bg-red-50 border border-red-300 text-red-700 rounded-2xl'; 
+                contentToShow = ( <div className="text-sm break-words"> <div className="flex items-center mb-1"><i className="fas fa-exclamation-triangle text-red-500 mr-2"></i><strong className="font-semibold">Error</strong></div>{message.text.replace(/^Error:\s*/, '')} </div>); 
+            } else { 
+                contentToShow = (
+                  <div ref={contentRef}>
+                    <div className="text-base markdown-content break-words" dangerouslySetInnerHTML={{ __html: marked.parse(message.text || '') }} />
+                    <div className="sources-placeholder"></div> {/* Placeholder for sources */}
+                  </div>
+                );
+            } 
+        }
+
+        return (
+          <div className={`flex items-end ${isUser ? 'justify-end' : 'justify-start'} animate-fade-in-up opacity-0`} style={{animationFillMode: 'forwards'}}>
+            <div className={`${bubbleBaseClasses} ${bubbleWidthClasses} ${bubbleRoleClasses}`} style={{animationFillMode: 'forwards'}}>
+              {isUser && message.attachedFiles && message.attachedFiles.length > 0 && (
+                <div className={`grid gap-2.5 ${message.text ? 'mb-2.5' : ''} ${message.attachedFiles.length > 1 ? 'grid-cols-2' : 'grid-cols-1'}`}>
+                  {message.attachedFiles.map(file => {
+                    if (file.type?.startsWith('image/') && file.apiData?.data && file.apiData?.mimeType) {
+                      const imageSrc = `data:${file.apiData.mimeType};base64,${file.apiData.data}`;
+                      return (
+                        <div key={file.id || file.name} className="rounded-lg overflow-hidden border border-brand-primary/20 bg-brand-primary/10 shadow-sm group relative max-w-full w-full sm:w-auto sm:max-w-[180px]">
+                          <img src={imageSrc} alt={file.name || 'image preview'} className="block w-full max-h-40 object-contain" />
+                          <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center justify-center p-1">
+                            <p className="text-[10px] text-white text-center truncate font-medium">{file.name}</p>
+                          </div>
+                        </div>
+                      );
+                    } else {
+                      return (
+                        <div key={file.id || file.name} className="bg-brand-primary/10 border border-brand-primary/20 p-2.5 rounded-lg text-xs flex items-center space-x-2 max-w-full w-fit shadow">
+                          {file.type?.startsWith('image/') ? 
+                            <FileImageIcon className="text-brand-primary text-base" /> : 
+                            <FileTextIcon className="text-brand-primary text-base" />
+                          }
+                          <span className="truncate max-w-[120px] sm:max-w-[150px] text-text-primary font-medium">
+                            {file.name}{file.type?.startsWith('image/') ? " (preview unavailable)" : ""}
+                          </span>
+                        </div>
+                      );
+                    }
+                  })}
+                </div>
+              )}
+              {contentToShow} 
+
+              {isModelLoadingThinking && ( 
+                <div className="flex items-end space-x-1.5 mt-2.5">
+                  <span className="w-1.5 h-1.5 bg-text-subtle rounded-full animate-typing-indicator" style={{ animationDelay: '0s' }}></span>
+                  <span className="w-1.5 h-1.5 bg-text-subtle rounded-full animate-typing-indicator" style={{ animationDelay: '0.15s' }}></span>
+                  <span className="w-1.5 h-1.5 bg-text-subtle rounded-full animate-typing-indicator" style={{ animationDelay: '0.3s' }}></span>
+                </div>
+              )}
+              {isModelLoadingWithSearch && (
+                <div className="flex items-center space-x-1.5 mt-2.5 text-text-subtle">
+                  <i className="fas fa-spinner fa-spin text-xs"></i>
+                  <span className="text-xs font-medium">Searching...</span>
+                </div>
+              )}
+            </div>
+          </div>);
+      };
+      
+      const ChatInterface = ({ messages, onSendMessage, isLoading, onStopGeneration, onRegenerateLastTextMessage, onClearChat, setChatError }) => {
+        const [inputText, setInputText] = useState(''); const [selectedFiles, setSelectedFiles] = useState([]); const [isMobileView, setIsMobileView] = useState(false); const [userHasScrolledUp, setUserHasScrolledUp] = useState(false);
+        const fileInputRef = useRef(null); const messagesEndRef = useRef(null); const textareaRef = useRef(null); const chatContainerRef = useRef(null); 
+        useEffect(() => { const checkMobileView = () => setIsMobileView(window.innerWidth < 768); window.addEventListener('resize', checkMobileView); checkMobileView(); return () => window.removeEventListener('resize', checkMobileView); }, []);
+        useEffect(() => { const container = chatContainerRef.current; if (!container) return; const handleScroll = () => { const { scrollTop, scrollHeight, clientHeight } = container; setUserHasScrolledUp(scrollHeight - scrollTop - clientHeight >= 20);}; container.addEventListener('scroll', handleScroll, { passive: true }); return () => container.removeEventListener('scroll', handleScroll); }, []); 
+        
+        useEffect(() => {
+          const lastMessage = messages[messages.length - 1];
+          if (!lastMessage) return; 
+
+          const messagesEndEl = messagesEndRef.current;
+          if (!messagesEndEl) return;
+
+          if (lastMessage.role === 'user') {
+            messagesEndEl.scrollIntoView({ behavior: "smooth" });
+          } else if (lastMessage.role === 'model') {
+            if (!userHasScrolledUp) { 
+              if (lastMessage.isLoading) {
+                messagesEndEl.scrollIntoView({ behavior: "auto" }); 
+              } else {
+                messagesEndEl.scrollIntoView({ behavior: "smooth" });
+              }
+            }
+          }
+        }, [messages, userHasScrolledUp]);
+
+        useEffect(() => { const ta = textareaRef.current; if (ta) { ta.style.height = 'auto'; const scrollHeight = ta.scrollHeight; const maxHeight = parseInt(getComputedStyle(ta).maxHeight, 10) || 180; ta.style.height = `${Math.min(scrollHeight, maxHeight)}px`; }}, [inputText]);
+        const handleFileChange = async (event) => { const files = Array.from(event.target.files); processAndSetFiles(files); if (fileInputRef.current) fileInputRef.current.value = ""; };
+        const handlePaste = async (event) => { const pastedFiles = Array.from(event.clipboardData.files); if (pastedFiles.length > 0) { const processedSomething = await processAndSetFiles(pastedFiles, true); if (processedSomething) event.preventDefault(); }};
+        const processAndSetFiles = async (filesArray, isFromPaste = false) => { if (!filesArray.length) return false; let filesToProcess = []; let currentTotalSize = selectedFiles.reduce((acc, curr) => acc + (curr.file?.size || 0), 0); let didProcessAnyFile = false; let localErrorMessage = null; for (const file of filesArray) { const isImage = file.type.startsWith('image/'); const isTxt = file.type === 'text/plain' || (file.name && file.name.toLowerCase().endsWith('.txt')); if (!isImage && !isTxt) { if (isFromPaste) console.log(`Pasted unsupported file: ${file.name} (${file.type})`); else localErrorMessage = `File "${file.name}" (type: ${file.type}) is not supported. Only images and .txt files allowed.`; continue; } if (file.size > MAX_FILE_SIZE_MB * 1024 * 1024) { localErrorMessage = `File "${file.name}" is larger than ${MAX_FILE_SIZE_MB}MB.`; continue; } if (currentTotalSize + file.size > MAX_TOTAL_FILES_SIZE_MB * 1024 * 1024) { localErrorMessage = `Total file size cannot exceed ${MAX_TOTAL_FILES_SIZE_MB}MB.`; break; } filesToProcess.push(file); currentTotalSize += file.size; didProcessAnyFile = true; } if(localErrorMessage){ setChatError(localErrorMessage); } else { setChatError(null); } if (filesToProcess.length > 0) { const processedFileObjects = await Promise.all( filesToProcess.map(async (file) => { const id = Date.now().toString(36) + Math.random().toString(36).substring(2) + file.name; let apiData; if (file.type.startsWith('image/')) { const base64Data = await new Promise((resolve, reject) => { const reader = new FileReader(); reader.readAsDataURL(file); reader.onloadend = () => resolve(reader.result.split(',')[1]); reader.onerror = (error) => reject(error); }); apiData = { mimeType: file.type, data: base64Data }; } else { const textContent = await file.text(); apiData = { textContent: textContent }; } return { id, file, name: file.name, type: file.type, apiData }; }) ); setSelectedFiles(prev => [...prev, ...processedFileObjects.filter(f => f)]); } return didProcessAnyFile; };
+        const removeSelectedFile = (fileId) => { setSelectedFiles(prev => prev.filter(f => f.id !== fileId)); };
+        const handleSubmit = (e) => { if(e) e.preventDefault(); if (!inputText.trim() && selectedFiles.length === 0) return; setUserHasScrolledUp(false); setChatError(null); onSendMessage(inputText, selectedFiles); setInputText(''); setSelectedFiles([]); };
+        const handleTextareaKeyDown = (e) => { if (e.key === 'Enter' && !e.shiftKey) { if (isMobileView) { return; } else { if (!isSendButtonDisabled) { handleSubmit(e); } else { e.preventDefault(); }}}};
+        const isAiCurrentlyProcessing = messages.some(m => m.role === 'model' && m.isLoading && !m.isError);
+        const isSendButtonDisabled = (!isAiCurrentlyProcessing && (isLoading || (inputText.trim() === '' && selectedFiles.length === 0)));
+        
+        const hasVisibleChatContent = messages.some( msg => (msg.text || msg.attachedFiles?.length > 0) && !(msg.role === 'system' && !msg.isError) );
+
+        const lastMessage = messages[messages.length - 1];
+        const userMessageForLastAi = messages.length > 1 ? messages[messages.length - 2] : null;
+
+        const isLastMessageAiAndFinalized = lastMessage && lastMessage.role === 'model' && !lastMessage.isLoading && !isAiCurrentlyProcessing;
+        const canRegenerateLastAiAsText = isLastMessageAiAndFinalized && userMessageForLastAi && userMessageForLastAi.role === 'user';
+
+        return (
+          <div className="w-full h-full sm:max-w-2xl md:max-w-3xl lg:max-w-[780px] sm:mx-auto bg-white rounded-none sm:rounded-xl shadow-chat-window flex flex-col overflow-hidden sm:my-6 sm:max-h-[calc(100vh-3rem)]">
+            <header className="p-4 border-b border-border-default bg-white flex items-center justify-between flex-shrink-0 shadow-header">
+                <div className="flex items-center space-x-3">
+                    <div className="w-10 h-10 bg-gradient-to-br from-purple-500 via-blue-400 to-teal-300 rounded-full flex items-center justify-center text-white text-xl font-bold">
+                        <span>AU</span>
+                    </div>
+                    <div>
+                        <h1 className="text-xl font-roboto font-semibold tracking-tight text-gradient-brand">Aura AI</h1>
+                        <p className="text-xs -mt-0.5 font-roboto text-gradient-brand-subtle">Insight Engine</p>
+                    </div>
+                </div>
+                <button onClick={() => { setChatError(null); onClearChat(); }} className="text-sm font-medium text-text-secondary hover:text-text-primary px-3 py-1.5 rounded-lg hover:bg-interactive-hover transition-colors duration-150 disabled:opacity-50 flex items-center space-x-1.5 group" aria-label="Clear chat" disabled={isLoading || messages.filter(m=>m.text || m.attachedFiles?.length > 0).length === 0}><i className="fas fa-broom fa-fw text-sm transition-transform group-hover:scale-110"></i><span className="hidden sm:inline">Clear</span></button>
+            </header>
+            
+            <div ref={chatContainerRef} className="flex-grow p-4 md:p-5 space-y-4 md:space-y-5 overflow-y-auto chat-messages-container relative bg-gray-50">
+                { !hasVisibleChatContent && !isLoading && ( 
+                    <div className="absolute inset-0 flex flex-col items-center justify-center text-center pointer-events-none p-8 opacity-0 animate-fade-in-up" style={{animationDelay: '0.2s', animationFillMode: 'forwards'}}>
+                        <p className="text-xl md:text-2xl font-[Outfit] font-semibold mb-2" style={{ color: '#536872' }}>Hello there!</p>
+                        <p className="text-sm font-[Outfit] mt-1.5" style={{ color: '#536872' }}>I am Aura AI. You can ask me anything or share files to get started.</p>
+                    </div> 
+                )}
+                {messages.map((msg) => ( (msg.text || msg.attachedFiles?.length > 0 || (msg.role === 'model' && msg.isLoading) || msg.isError) && 
+                    <div key={msg.id}> 
+                        <ChatMessageItem message={msg} /> 
+                    </div> 
+                ))}
+                {canRegenerateLastAiAsText && (
+                    <div className={`flex mt-2 justify-start`}> 
+                        <button 
+                            onClick={() => { 
+                                setChatError(null); 
+                                onRegenerateLastTextMessage(lastMessage.id);
+                            }} 
+                            className="p-1.5 rounded-full text-text-subtle hover:text-brand-primary hover:bg-interactive-hover transition-all duration-150 group" 
+                            aria-label="Regenerate response" 
+                            disabled={isLoading || isAiCurrentlyProcessing} 
+                        > 
+                            <i className="fas fa-arrows-rotate text-xs transform transition-transform duration-200 group-hover:rotate-[75deg]"></i> 
+                        </button> 
+                    </div> 
+                )}
+                <div ref={messagesEndRef} className="h-1" />
+            </div>
+            
+            {selectedFiles.length > 0 && ( <div className="p-3 border-t border-border-default bg-white flex flex-wrap gap-2 items-center overflow-x-auto flex-shrink-0"> {selectedFiles.map(file => ( <div key={file.id} className="bg-gray-100 border border-border-light text-xs pl-2.5 pr-1.5 py-1 rounded-full flex items-center shadow-sm hover:shadow-md transition-shadow duration-150 flex-shrink-0 animate-scale-in-subtle"> {file.type.startsWith('image/') ? <FileImageIcon className="text-brand-primary text-sm mr-1.5"/> : <FileTextIcon className="text-brand-primary text-sm mr-1.5"/> } <span className="truncate max-w-[90px] sm:max-w-[120px] text-text-secondary font-medium">{file.name}</span> <button onClick={() => removeSelectedFile(file.id)} className="ml-2 text-slate-400 hover:text-status-error p-0.5 rounded-full hover:bg-red-500/10 transition-colors"> <i className="fas fa-times text-xs"></i> </button> </div> ))} </div> )}
+
+            <form onSubmit={handleSubmit} className="bg-white border-t border-border-default flex-shrink-0">
+              <div className="pt-2 pb-3 pr-3 md:pt-2 md:pb-4 md:pr-4 flex items-end space-x-2 md:space-x-3 pl-3 md:pl-4"> {/* Removed button container, added pl to main div */}
+                <input type="file" ref={fileInputRef} onChange={handleFileChange} className="hidden" multiple accept="image/*,.txt,text/plain" disabled={isLoading || isAiCurrentlyProcessing} /> 
+                <button
+                  type="button"
+                  onClick={() => fileInputRef.current?.click()}
+                  className="
+                    w-10 h-10 bg-white border border-border-medium rounded-xl
+                    flex items-center justify-center text-text-subtle
+                    shadow-sm
+                    hover:bg-surface-accent 
+                    transition-colors duration-150
+                    disabled:opacity-60 disabled:cursor-not-allowed
+                    flex-shrink-0
+                  "
+                  aria-label="Attach files"
+                  disabled={isLoading || isAiCurrentlyProcessing}
+                >
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
+                  </svg>
+                </button>
+                <textarea 
+                    ref={textareaRef} 
+                    value={inputText} 
+                    onChange={(e) => setInputText(e.target.value)} 
+                    onPaste={handlePaste} 
+                    onKeyDown={handleTextareaKeyDown} 
+                    placeholder="Type your message..." 
+                    rows={1} 
+                    className="flex-grow px-2.5 sm:px-3 py-3 text-sm md:text-base border border-border-medium rounded-xl bg-white shadow-sm focus:outline-none focus:ring-1 focus:ring-interactive-focus-ring focus:border-transparent resize-none placeholder-text-subtle auto-resize" 
+                    disabled={isLoading || isAiCurrentlyProcessing}
+                /> 
+                <button 
+                    type={isAiCurrentlyProcessing ? "button" : "submit"} 
+                    onClick={isAiCurrentlyProcessing ? onStopGeneration : undefined } 
+                    disabled={isAiCurrentlyProcessing ? false : isSendButtonDisabled} 
+                    className={`
+                        font-semibold w-10 h-10 rounded-xl shadow-sm 
+                        flex items-center justify-center 
+                        transition-all duration-200 ease-in-out transform active:animate-button-press 
+                        flex-shrink-0 focus:outline-none
+                        ${ (isSendButtonDisabled && !isAiCurrentlyProcessing) 
+                            ? 'bg-gray-200 text-gray-400 cursor-not-allowed shadow-none' 
+                            : `bg-button-send-bg text-text-on-primary hover:bg-button-send-hover-bg ${!isAiCurrentlyProcessing ? 'focus:ring-2 focus:ring-offset-2 focus:ring-interactive-focus-ring' : ''}`
+                        }
+                    `}
+                    aria-label={isAiCurrentlyProcessing ? "Stop generation" : "Send message"}
+                > 
+                  {isAiCurrentlyProcessing ? (
+                    <i className="fas fa-stop text-sm"></i> 
+                  ) : (
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
+                      <path d="M3.478 2.404a.75.75 0 0 0-.926.941l2.432 7.905H13.5a.75.75 0 0 1 0 1.5H4.984l-2.432 7.905a.75.75 0 0 0 .926.94 60.519 60.519 0 0 0 18.445-8.986.75.75 0 0 0 0-1.218A60.517 60.517 0 0 0 3.478 2.404Z" />
+                    </svg>
+                  )} 
+                </button> 
+              </div>
+            </form>
+          </div>);
+      };
+      
+      const App = () => { 
+        const [chatMessages, setChatMessages] = useState([]); 
+        const [isChatLoading, setIsChatLoading] = useState(false); 
+        const [chatError, setChatError] = useState(null); 
+
+        const isStoppingGenerationRef = useRef(false);
+        
+        useEffect(() => { 
+            if (chatError) { 
+                const errorId = Date.now() + '_sys_validation_err'; 
+                setChatMessages(prev => { 
+                    const lastMessage = prev[prev.length -1]; 
+                    if(lastMessage && lastMessage.id.includes('_sys_validation_err') && lastMessage.text === chatError) return prev; 
+                    return [...prev, {id: errorId, role: 'system', text: chatError, isError: true, timestamp: new Date()}]; 
+                }); 
+            }
+        }, [chatError]); 
+
+        const getGeminiHistory = (currentMessagesInternalFormat) => {
+            const geminiMessages = currentMessagesInternalFormat
+                .filter(msg => !(msg.role === 'system' || (msg.role === 'model' && msg.isLoading) || msg.isError))
+                .map(msg => {
+                    const parts = [];
+                    if (msg.role === 'model') {
+                        if (msg.text) { 
+                            parts.push({ text: msg.text });
+                        }
+                    } else if (msg.role === 'user') {
+                        if (msg.text) parts.push({ text: msg.text });
+                        if (msg.attachedFiles) {
+                            msg.attachedFiles.forEach(file => {
+                                if (file.type.startsWith('image/') && file.apiData?.mimeType && file.apiData?.data) {
+                                    parts.push({ inlineData: { mimeType: file.apiData.mimeType, data: file.apiData.data } });
+                                } else if ((file.name.toLowerCase().endsWith('.txt') || file.type === 'text/plain') && file.apiData?.textContent) {
+                                    parts.push({ text: `\n[Attached Text File: ${file.name}]\n${file.apiData.textContent}\n` });
+                                }
+                            });
+                        }
+                    }
+                    return { role: msg.role, parts };
+                }).filter(entry => entry.parts.length > 0);
+
+            if (geminiMessages.length > 0 && geminiMessages[0].role === 'model') {
+                const firstUserIndex = geminiMessages.findIndex(m => m.role === 'user');
+                if (firstUserIndex === -1) return []; 
+                const slicedHistory = geminiMessages.slice(firstUserIndex);
+                if (slicedHistory.length > 1 && slicedHistory[0].role === slicedHistory[1].role) {
+                    return [slicedHistory[0]];
+                }
+                return slicedHistory;
+            }
+            return geminiMessages;
+        };
+        useEffect(() => { if (!API_KEY || API_KEY === "YOUR_GEMINI_API_KEY") { setChatError("API Key is not configured. Please set it up."); } }, []); 
+        
+        const handleStopGeneration = useCallback(() => {
+            isStoppingGenerationRef.current = true;
+            setIsChatLoading(false); 
+
+            setChatMessages(prevMessages => {
+                let messageUpdated = false;
+                const updatedMessages = prevMessages.map(msg => {
+                    if (msg.role === 'model' && msg.isLoading) {
+                        messageUpdated = true;
+                        let newText = msg.text || ""; 
+                        const stopNotice = "*Generation stopped by user.*";
+                        
+                        if (!newText.includes(stopNotice)) {
+                            const currentContent = msg.text || "";
+                            if (currentContent.trim()) {
+                                let processedContent = currentContent;
+                                const isInCodeBlock = (processedContent.match(/```/g) || []).length % 2 !== 0;
+                                if (isInCodeBlock) {
+                                    processedContent += "\n```"; 
+                                }
+                                newText = processedContent + (processedContent.trim() ? "\n\n---\n" : "") + stopNotice;
+                            } else {
+                                newText = stopNotice;
+                            }
+                        }
+                        
+                        return { ...msg, text: newText, isLoading: false };
+                    }
+                    return msg;
+                });
+                return messageUpdated ? updatedMessages : prevMessages;
+            });
+        }, []); 
+
+        const handleClearChat = useCallback(() => { if(!API_KEY || API_KEY === "YOUR_GEMINI_API_KEY"){ setChatError("API Key not configured. Please set it up to use the chat."); } else { setChatError(null); } setChatMessages([]); }, []);
+        
+        const mergeCitations = (existingSources, newSources) => {
+            if (!newSources || newSources.length === 0) return existingSources;
+            const existingUris = new Set((existingSources || []).map(s => s.uri));
+            const uniqueNewSources = newSources.filter(src => src.uri && !existingUris.has(src.uri));
+            return [...(existingSources || []), ...uniqueNewSources];
+        };
+        
+        const _streamAiResponse = async (
+            originalPromptParts, 
+            targetAiMessageId, 
+            historyForGeminiInit, 
+            useSearchInitially,
+            currentLoadingText
+        ) => {
+            setIsChatLoading(true);
+
+            let displayedAiText = "";
+            let accumulatedSources = [];
+
+            if (isStoppingGenerationRef.current) return; 
+
+            try {
+                const modelConfig = { model: GEMINI_MODEL_NAME, systemInstruction: getSystemInstruction() };
+                if (useSearchInitially) { 
+                    modelConfig.tools = [{ googleSearch: {} }];
+                }
+                const chatModel = genAI.getGenerativeModel(modelConfig);
+                const chatSession = chatModel.startChat({ history: historyForGeminiInit });
+                
+                if (isStoppingGenerationRef.current) return;
+
+                const result = await chatSession.sendMessageStream(originalPromptParts);
+
+                for await (const chunk of result.stream) { 
+                    if (isStoppingGenerationRef.current) break;
+                    
+                    const rawChunkText = chunk.text();
+                    let chunkTextForDisplay = "";
+
+                    if (typeof rawChunkText === 'string') {
+                        const lines = rawChunkText.split('\n');
+                        const filteredLines = lines.filter(line => 
+                            !line.trim().startsWith("tool_code") &&
+                            !line.trim().startsWith("print(google_search.search")
+                        );
+                        if (filteredLines.length > 0 && filteredLines.some(line => line.trim() !== "" || lines.length === filteredLines.length )) {
+                           chunkTextForDisplay = filteredLines.join('\n');
+                        } else if (filteredLines.length === 0 && rawChunkText.trim() !== "") {
+                            chunkTextForDisplay = ""; 
+                        } else {
+                            chunkTextForDisplay = rawChunkText; 
+                        }
+                    }
+
+                    if (chunkTextForDisplay.length > 0 || (chunkTextForDisplay === "" && rawChunkText === "")) { 
+                        displayedAiText += chunkTextForDisplay;
+                    }
+                    
+                    let sourcesDelta;
+                    if (chunk.candidates && chunk.candidates[0]?.groundingMetadata?.groundingChunks) {
+                        sourcesDelta = chunk.candidates[0].groundingMetadata.groundingChunks
+                          .filter(gc => gc.web && gc.web.uri)
+                          .map(gc => ({ uri: gc.web.uri, title: gc.web.title || gc.web.uri }));
+                        if (sourcesDelta) {
+                           accumulatedSources = mergeCitations(accumulatedSources, sourcesDelta);
+                        }
+                    }
+
+
+                    if ((displayedAiText.trim().length > 0 || accumulatedSources.length > 0) && !isStoppingGenerationRef.current) {
+                        setChatMessages(prev => prev.map(m => m.id === targetAiMessageId ? { 
+                            ...m, 
+                            text: displayedAiText, 
+                            isLoading: true, 
+                            isError: false, 
+                            sources: accumulatedSources.length > 0 ? [...accumulatedSources] : null, 
+                            searchUsed: useSearchInitially || m.searchUsed,
+                            loadingText: currentLoadingText // Keep showing "Searching..." or "Thinking..."
+                        } : m));
+                    }
+                    
+                    if (isStoppingGenerationRef.current) break;
+                }
+                
+                setChatMessages(prev => prev.map(m => {
+                    if (m.id === targetAiMessageId) {
+                        let finalText = displayedAiText;
+                        let isMessageError = false; 
+                        const stopNoticeStr = "*Generation stopped by user.*";
+
+                        if (isStoppingGenerationRef.current && !(m.text && m.text.includes(stopNoticeStr)) ) { 
+                            let baseText = displayedAiText;
+                            const isInCodeBlock = (baseText.match(/```/g) || []).length % 2 !== 0;
+                            if (isInCodeBlock) baseText += "\n```";
+                            baseText += (baseText.trim() ? "\n\n---\n" : "") + stopNoticeStr;
+                            finalText = baseText;
+                        } else if (isStoppingGenerationRef.current) {
+                             finalText = m.text || stopNoticeStr; 
+                        } else if (!finalText.trim() && (!accumulatedSources || accumulatedSources.length === 0)) {
+                            if (useSearchInitially) {
+                                finalText = "Mujhe abhi search karne mein thori dushwari pesh aa rahi hai, ya shayad is mauzu par wazeh maloomat nahi mil pa rahi. Aap message dobara regenerate karne ki koshish kar sakte hain, ya apna sawal thora badal kar poochein. Shukriya! 🙏";
+                            } else {
+                                finalText = "Mera khayal hai ke mujhe samajhne mein kuch dushwari hui. Kya aap apna sawal wazeh kar sakte hain? 🤔";
+                            }
+                        } else if (!finalText.trim() && accumulatedSources && accumulatedSources.length > 0 && !isStoppingGenerationRef.current) { 
+                            finalText = "*Mawad search results par mabni hai (neeche hawale dekhein).*";
+                        }
+                        return { 
+                            ...m, 
+                            text: finalText, 
+                            isLoading: false, 
+                            isError: isMessageError, 
+                            sources: accumulatedSources.length > 0 ? [...accumulatedSources] : null, 
+                            searchUsed: useSearchInitially || m.searchUsed 
+                        };
+                    }
+                    return m;
+                }));
+
+            } catch (err) {
+                console.error("AI stream error in _streamAiResponse:", err);
+                let errorTextForUser = "Jawab dene mein kuch takneeki dushwari pesh aa rahi hai. Barah-e-karam thori dair baad dobara koshish karein."; 
+                if (err.message?.toLowerCase().includes("api key not valid")) errorTextForUser = "Lagta hai API key mein koi masla hai.";
+                else if (err.message?.toLowerCase().includes("candidate was blocked")) errorTextForUser = "Meri hifazati policies ki wajah se main yeh jawab nahi de sakta.";
+                else if (err.message?.toLowerCase().includes("quota")) errorTextForUser = "API istemal ki had poori ho gayi hai.";
+                
+                setChatMessages(prev => prev.map(m => m.id === targetAiMessageId ? { ...m, role: 'model', text: errorTextForUser, isLoading: false, isError: true, searchUsed: useSearchInitially } : m));
+            } finally {
+                setIsChatLoading(false);
+            }
+        };
+
+        const handleSendChatMessage = useCallback(async (messageText, filesToSend) => {
+            if (!messageText.trim() && filesToSend.length === 0) return;
+            isStoppingGenerationRef.current = false; 
+            setChatError(null);
+            if (!API_KEY || API_KEY === "YOUR_GEMINI_API_KEY") {
+                setChatError("API Key is not configured.");
+                return;
+            }
+            
+            const currentChatHistoryForGemini = getGeminiHistory(chatMessages);
+            const userMessageFiles = filesToSend.map(f => ({ id: f.id, name: f.name, type: f.type, apiData: f.apiData }));
+            
+            const newUserMessageForUi = { id: Date.now().toString() + '_user', role: 'user', text: messageText, timestamp: new Date(), attachedFiles: userMessageFiles };
+            const aiMessageId = Date.now().toString() + '_model_resp';
+
+            // --- IMMEDIATE UI UPDATE ---
+            // 1. Create a preliminary AI placeholder with a "Thinking..." state
+            const preliminaryAiPlaceholder = { 
+                id: aiMessageId, 
+                role: 'model', 
+                text: '', 
+                loadingText: "Thinking...", // Default state
+                timestamp: new Date(), 
+                isLoading: true, 
+                isError: false, 
+                sources: null, 
+                searchUsed: false, // Default state
+            }; 
+            
+            // 2. Add user message and preliminary placeholder to the chat immediately
+            setChatMessages(prev => {
+                const filteredPrev = prev.filter(m => !(m.role === 'system' && m.isError));
+                return [...filteredPrev, newUserMessageForUi, preliminaryAiPlaceholder];
+            });
+            // --- END IMMEDIATE UI UPDATE ---
+            
+            // 3. Determine search need in the background
+            const needsSearch = await determineSearchNeed_service(genAI, messageText.trim());
+            const finalLoadingText = needsSearch ? "Searching..." : "Thinking...";
+
+            // 4. Update the placeholder's state if a search is needed, changing the loader text
+            if (needsSearch) {
+                setChatMessages(prev => prev.map(m => m.id === aiMessageId ? { ...m, loadingText: finalLoadingText, searchUsed: true } : m));
+            }
+
+            // 5. Prepare prompt parts and initiate the AI stream call
+            const promptPartsForUserTurn = [];
+            if (messageText.trim()) promptPartsForUserTurn.push({ text: messageText.trim() });
+            filesToSend.forEach(file => {
+                if (file.type.startsWith('image/') && file.apiData.mimeType && file.apiData.data) {
+                    promptPartsForUserTurn.push({ inlineData: file.apiData });
+                } else if ((file.name.toLowerCase().endsWith('.txt') || file.type === 'text/plain') && file.apiData.textContent) {
+                    promptPartsForUserTurn.push({ text: `\n[Start of Text File: ${file.name}]\n${file.apiData.textContent}\n[End of Text File: ${file.name}]\n` });
+                }
+            });
+
+            if (promptPartsForUserTurn.length > 0) {
+                await _streamAiResponse(
+                    promptPartsForUserTurn, 
+                    aiMessageId, 
+                    currentChatHistoryForGemini, 
+                    needsSearch,
+                    finalLoadingText
+                );
+            } else { 
+                setChatMessages(prev => prev.map(m => m.id === aiMessageId ? { ...m, role: 'model', text: "No content to send.", isLoading: false, isError: true } : m ).filter(msg => msg.id !== aiMessageId || msg.isError));
+                setIsChatLoading(false);
+            }
+            
+        }, [chatMessages]); 
+
+        const handleRegenerateLastTextMessage = useCallback(async (aiMessageIdToRegenerate) => { 
+            isStoppingGenerationRef.current = false; 
+            setChatError(null);
+            if (!API_KEY || API_KEY === "YOUR_GEMINI_API_KEY") {
+                setChatError("API Key is not configured for regeneration.");
+                return;
+            }
+            const originalAiMsgIndex = chatMessages.findIndex(m => m.id === aiMessageIdToRegenerate);
+            if (originalAiMsgIndex <= 0 || chatMessages[originalAiMsgIndex-1].role !== 'user') {
+                setChatError("Cannot regenerate: Preceding user prompt not found.");
+                return;
+            }
+            
+            const userPromptMsg = chatMessages[originalAiMsgIndex-1];
+            const historyBeforeUserPromptInternal = chatMessages.slice(0, originalAiMsgIndex - 1);
+            const historyForGeminiInit = getGeminiHistory(historyBeforeUserPromptInternal);
+
+            // --- IMMEDIATE UI UPDATE ---
+            // 1. Create a preliminary AI placeholder with a "Thinking..." state
+            const newAiPlaceholderId = Date.now().toString() + '_model_regen';
+            const preliminaryAiPlaceholder = { 
+                id: newAiPlaceholderId, 
+                role: 'model', 
+                text:'', 
+                loadingText: "Thinking...", // Default state
+                isLoading:true, 
+                timestamp:new Date(), 
+                isError: false, 
+                sources: null, 
+                searchUsed: false, // Default state
+            };
+            
+            // 2. Replace old AI message with the preliminary placeholder immediately
+            const chatHistoryForUiUpdate = chatMessages.slice(0, originalAiMsgIndex);
+            setChatMessages([...chatHistoryForUiUpdate, preliminaryAiPlaceholder]);
+            // --- END IMMEDIATE UI UPDATE ---
+
+            // 3. Determine search need in the background
+            const needsSearch = await determineSearchNeed_service(genAI, userPromptMsg.text || "");
+            const finalLoadingText = needsSearch ? "Searching..." : "Thinking...";
+            
+            // 4. Update placeholder state if search is needed
+            if(needsSearch) {
+                setChatMessages(prev => prev.map(m => m.id === newAiPlaceholderId ? { ...m, loadingText: finalLoadingText, searchUsed: true } : m));
+            }
+            
+            // 5. Prepare prompt parts and initiate AI stream call
+            const promptPartsForRegen = [];
+            if (userPromptMsg.text) promptPartsForRegen.push({ text: userPromptMsg.text });
+            userPromptMsg.attachedFiles?.forEach(file => { 
+                 if (file.type.startsWith('image/') && file.apiData.mimeType && file.apiData.data) {
+                    promptPartsForRegen.push({ inlineData: file.apiData });
+                 } else if ((file.name.toLowerCase().endsWith('.txt') || file.type === 'text/plain') && file.apiData?.textContent) {
+                    promptPartsForRegen.push({ text: `\n[Start of Text File: ${file.name}]\n${file.apiData.textContent}\n[End of Text File: ${file.name}]\n` });
+                }
+            });
+
+            if (promptPartsForRegen.length > 0) {
+                await _streamAiResponse(
+                    promptPartsForRegen, 
+                    newAiPlaceholderId, 
+                    historyForGeminiInit, 
+                    needsSearch,
+                    finalLoadingText
+                );
+            } else { 
+                setChatMessages(prev => prev.map(m => m.id === newAiPlaceholderId ? {...m, isLoading: false, text: "No content found to regenerate.", isError: true} : m));
+            }
+        }, [chatMessages]); 
+
+
+        return (
+            <div className="h-full text-text-primary flex flex-col font-sans items-center justify-start sm:justify-center p-0">
+                <ChatInterface 
+                    messages={chatMessages} 
+                    onSendMessage={handleSendChatMessage} 
+                    isLoading={isChatLoading} 
+                    onStopGeneration={handleStopGeneration} 
+                    onRegenerateLastTextMessage={handleRegenerateLastTextMessage} 
+                    onClearChat={handleClearChat} 
+                    setChatError={setChatError} 
+                />
+            </div>
+        );
+      };
+
+      const root = ReactDOM.createRoot(document.getElementById('root'));
+      root.render(<React.StrictMode><App /></React.StrictMode>);
+    </script>
+  </body>
+</html>
